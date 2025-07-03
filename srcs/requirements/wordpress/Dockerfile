@@ -1,5 +1,8 @@
 FROM debian:bullseye
 
+# Set non-interactive mode to avoid prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     php-fpm php-mysql php-cli php-curl php-gd php-mbstring php-xml php-zip wget unzip curl mariadb-client \

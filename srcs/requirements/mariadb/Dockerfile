@@ -1,21 +1,27 @@
 FROM debian:bullseye
 
-# Install MariaDB
-RUN apt-get update && apt-get install -y mariadb-server \
-    && rm -rf /var/lib/apt/lists/*
+# Prevent interactive prompts during build
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Copy configuration file and init script
+# Install MariaDB and clean up APT cache
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      apt-transport-https ca-certificates gnupg dirmngr \
+      mariadb-server mariadb-client \
+ && rm -rf /var/lib/apt/lists/*
+
+# Copy custom configuration and init script
 COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 COPY tools/init.sh /usr/local/bin/init.sh
 
-# Make init script executable
+# Make the init script executable
 RUN chmod +x /usr/local/bin/init.sh
 
-# Set working directory for safety
-WORKDIR /var/lib/mysql
-
-# Expose MariaDB default port
+# Expose the default MariaDB port
 EXPOSE 3306
 
-# Entrypoint to handle DB init and run mysqld
+# Set the init script as the container entrypoint
 ENTRYPOINT ["/usr/local/bin/init.sh"]
+
+# Run the MariaDB daemon in foreground by default
+CMD ["mysqld"]
