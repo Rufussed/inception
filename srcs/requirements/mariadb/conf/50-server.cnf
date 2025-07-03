@@ -1,0 +1,16 @@
+[mysqld]
+bind-address = 0.0.0.0
+port = 3306
+datadir = /var/lib/mysql
+socket = /run/mysqld/mysqld.sock
+
+# Secure defaults
+skip-host-cache
+skip-name-resolve
+
+# Charset
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+
+# Logging
+log_error = /var/log/mysql/error.log
