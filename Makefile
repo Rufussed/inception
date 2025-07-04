@@ -6,7 +6,7 @@ all: ssl build up
 
 ssl:
 	@echo "🔐 Generating SSL certificate..."
-	@bash ./generate-ssl.sh
+	@bash srcs/requirements/nginx/generate-ssl.sh
 
 build:
 	@echo "🔧 Building containers..."

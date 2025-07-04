@@ -8,11 +8,14 @@ RUN apt-get update && apt-get install -y \
     php-fpm php-mysql php-cli php-curl php-gd php-mbstring php-xml php-zip wget unzip curl mariadb-client \
     && rm -rf /var/lib/apt/lists/*
 
-# Download and extract WordPress
-RUN curl -O https://wordpress.org/latest.tar.gz \
-    && tar -xzf latest.tar.gz \
-    && mv wordpress /var/www/html \
-    && rm latest.tar.gz
+# Ensure target directory exists
+RUN mkdir -p /var/www/html
+
+# Download and unpack WordPress
+RUN curl -fSL https://wordpress.org/latest.tar.gz -o latest.tar.gz \
+ && tar -xzf latest.tar.gz \
+ && mv wordpress/* /var/www/html/ \
+ && rm -rf latest.tar.gz wordpress
 
 # Copy custom init script
 COPY tools/init.sh /usr/local/bin/init.sh
@@ -29,3 +32,4 @@ EXPOSE 9000
 
 # Entrypoint
 ENTRYPOINT ["/usr/local/bin/init.sh"]
+
