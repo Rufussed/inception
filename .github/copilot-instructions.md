@@ -10,7 +10,8 @@ This is a 42 School Inception project implementing a multi-container Docker envi
 ## Development Guidelines
 
 ### Docker Best Practices
-- Use Alpine Linux as base images when possible
+- Use Debian Bullseye as base images when possible
+- Do not use version as we are using a newer version of Docker Compose
 - Follow multi-stage builds for optimization
 - Never use `FROM nginx:latest` or similar - build from scratch
 - Use proper health checks in containers
@@ -30,6 +31,27 @@ This is a 42 School Inception project implementing a multi-container Docker envi
 - Configuration files go in `conf/` subdirectories
 - Initialization scripts go in `tools/` subdirectories
 - Use volumes for persistent data: `~/data/wordpress` and `~/data/mariadb`
+
+# Directory Structure
+inception/
+├── Makefile
+├── srcs/
+│   ├── .env
+│   ├── docker-compose.yml
+│   ├── requirements/
+│   │   ├── mariadb/
+│   │   │   ├── Dockerfile
+│   │   │   └── tools/
+│   │   │       └── setup.sh
+│   │   ├── nginx/
+│   │   │   ├── Dockerfile
+│   │   │   └── conf/
+│   │   │       └── nginx.conf
+│   │   └── wordpress/
+│   │       ├── Dockerfile
+│   │       └── tools/
+│   │           └── setup.sh
+└── ... (data volumes will be created here by Docker)
 
 ### Networking
 - Services communicate via Docker network
