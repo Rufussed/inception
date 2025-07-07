@@ -8,10 +8,6 @@ all: setup ssl build up
 setup:
 	@mkdir -p $(DATA_DIR)/mariadb $(DATA_DIR)/wordpress
 
-ssl:
-	@echo "🔐 Generating SSL certificate..."
-	@bash srcs/requirements/nginx/tools/generate-ssl.sh
-
 build:
 	@echo "🔧 Building containers..."
 	docker compose -f srcs/docker-compose.yml --env-file $(ENV_FILE) build
