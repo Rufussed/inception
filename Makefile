@@ -1,8 +1,12 @@
 # .env file must define HTTPS_PORT and other variables
 ENV_FILE=srcs/.env
+DATA_DIR=/home/$(USER)/data
 
 # Main targets
-all: ssl build up
+all: setup ssl build up
+
+setup:
+	@mkdir -p $(DATA_DIR)/mariadb $(DATA_DIR)/wordpress
 
 ssl:
 	@echo "🔐 Generating SSL certificate..."
@@ -34,4 +38,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all ssl build up down restart clean fclean re
+.PHONY: all setup ssl build up down restart clean fclean re

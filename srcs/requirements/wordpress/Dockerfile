@@ -1,35 +1,16 @@
-FROM debian:bullseye
+# Use the official WordPress PHP-FPM base image
+FROM wordpress:php7.4-fpm
 
-# Set non-interactive mode to avoid prompts during package installation
-ENV DEBIAN_FRONTEND=noninteractive
+# === Copy WordPress config and setup script ===
 
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    php-fpm php-mysql php-cli php-curl php-gd php-mbstring php-xml php-zip wget unzip curl mariadb-client \
-    && rm -rf /var/lib/apt/lists/*
+# This includes your wp-config.php template or other files
+COPY conf /var/www/html/
 
-# Ensure target directory exists
-RUN mkdir -p /var/www/html
+# VirtualBox Workaround: shared folders are mounted with noexec
+COPY tools/init.sh /tmp/init.sh
 
-# Download and unpack WordPress
-RUN curl -fSL https://wordpress.org/latest.tar.gz -o latest.tar.gz \
- && tar -xzf latest.tar.gz \
- && mv wordpress/* /var/www/html/ \
- && rm -rf latest.tar.gz wordpress
+# Make the script executable
+RUN chmod +x /tmp/init.sh
 
-# Copy custom init script
-COPY tools/init.sh /usr/local/bin/init.sh
-RUN chmod +x /usr/local/bin/init.sh
-
-# Set working directory
-WORKDIR /var/www/html
-
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html
-
-# Expose php-fpm port
-EXPOSE 9000
-
-# Entrypoint
-ENTRYPOINT ["/usr/local/bin/init.sh"]
-
+# Set entrypoint to custom init logic (creates wp-config, starts php-fpm)
+ENTRYPOINT ["/tmp/init.sh"]

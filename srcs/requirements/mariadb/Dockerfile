@@ -1,30 +1,19 @@
-FROM debian:bullseye
+# Use official MariaDB image (includes Debian + MariaDB server)
+FROM mariadb:10.5
 
-# Prevent interactive prompts during build
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Install MariaDB and clean up APT cache
-RUN apt-get update \
- && apt-get install -y --no-install-recommends \
-      mariadb-server \
-      bash \
- && rm -rf /var/lib/apt/lists/*
-
-# Ensure the mysql user owns the data directory
-RUN chown -R mysql:mysql /var/lib/mysql
-
-# Copy custom configuration and init script
+# Copy custom configuration into the container
 COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
-COPY tools/init.sh /usr/local/bin/init.sh
 
-# Make the init script executable
-RUN chmod +x /usr/local/bin/init.sh
+# === Init Script Integration ===
+# Instead of replacing the entrypoint, we use the official hook:
+# Any .sh or .sql file in /docker-entrypoint-initdb.d/ is executed on first run
+COPY tools/init.sh /docker-entrypoint-initdb.d/init.sh
 
-# Expose the default MariaDB port
-EXPOSE 3306
+# Ensure the script is executable
+RUN chmod +x /docker-entrypoint-initdb.d/init.sh
 
-# Run as the mysql user
-USER mysql
-
-# Set the init script as the container entrypoint
-ENTRYPOINT ["/usr/local/bin/init.sh"]
+# Not needed but as the image is based on the official MariaDB image, for clarity
+# we set the entrypoint to the default MariaDB entrypoint script
+# This allows the container to start MariaDB with the provided configuration
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["mysqld"]
