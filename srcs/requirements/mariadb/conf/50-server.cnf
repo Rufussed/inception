@@ -1,16 +1,25 @@
 [mysqld]
-bind-address = 0.0.0.0
+user = mysql
+pid-file = /var/run/mysqld/mysqld.pid
+socket = /var/run/mysqld/mysqld.sock
 port = 3306
+basedir = /usr
 datadir = /var/lib/mysql
-socket = /run/mysqld/mysqld.sock
+tmpdir = /tmp
+bind-address = 0.0.0.0
+skip-networking = 0
 
-# Secure defaults
-skip-host-cache
-skip-name-resolve
+# Security
+skip-name-resolve = 1
 
-# Charset
+# Crash-safer defaults
+innodb_flush_log_at_trx_commit = 1
+sync_binlog = 1
+
+# Character sets
 character-set-server = utf8mb4
 collation-server = utf8mb4_unicode_ci
 
-# Logging
-log_error = /var/log/mysql/error.log
+# InnoDB settings
+innodb_buffer_pool_size = 128M
+innodb_file_per_table = 1

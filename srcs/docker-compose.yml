@@ -4,27 +4,19 @@ services:
       context: ./requirements/mariadb
     container_name: mariadb
     env_file: .env
-    environment:
-      MYSQL_DATABASE: ${WORDPRESS_DB_NAME}
-      MYSQL_USER: ${WORDPRESS_DB_USER}
-      MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     networks:
       - inception
     volumes:
       - mariadb_data:/var/lib/mysql
-    restart: on-failure
+    restart: always
+    ports:
+      - "3306:3306"
 
   wordpress:
     build:
       context: ./requirements/wordpress
     container_name: wordpress
     env_file: .env
-    environment:
-      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
-      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
-      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
-      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
     depends_on:
       - mariadb
     networks:
@@ -32,6 +24,11 @@ services:
     volumes:
       - wordpress_files:/var/www/html
     restart: on-failure
+    healthcheck:
+      test: ["CMD", "test", "-f", "/var/www/html/wp-config.php"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   nginx:
     build:
@@ -39,7 +36,8 @@ services:
     container_name: nginx
     env_file: .env
     depends_on:
-      - wordpress
+      wordpress:
+        condition: service_healthy
     ports:
       - "443:443"
     networks:
@@ -59,6 +57,7 @@ volumes:
       type: none
       o: bind
       device: /home/rlane/data/mariadb
+
   wordpress_files:
     driver: local
     driver_opts:
