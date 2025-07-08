@@ -53,14 +53,5 @@ networks:
 volumes:
   mariadb_data:
     driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /home/rlane/data/mariadb
-
   wordpress_files:
     driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /home/rlane/data/wordpress

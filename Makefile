@@ -1,15 +1,7 @@
 ENV_FILE=srcs/.env
-DATA_DIR=/home/$(USER)/data
 
 # Main targets
-all: setup build up
-
-setup:
-	@echo "📁 Creating data directories if not present..."
-	@mkdir -p $(DATA_DIR)/mariadb $(DATA_DIR)/wordpress
-	@echo "🔐 Setting permissions for data directories..."
-	@sudo chown -R 108:117 $(DATA_DIR)/mariadb
-	@sudo chown -R 33:33 $(DATA_DIR)/wordpress
+all: build up
 
 build:
 	@echo "🔧 Building containers..."
@@ -30,12 +22,7 @@ restart: down
 clean: down
 	@echo "🧹 Removing volumes..."
 	@docker volume rm srcs_mariadb_data srcs_wordpress_files || true
-
-clean-persistent-data: down
-	@echo "🗑️ Removing persistent data directories AND volumes..."
-	@sudo rm -rf $(DATA_DIR)/mariadb $(DATA_DIR)/wordpress
-	@docker volume rm srcs_mariadb_data srcs_wordpress_files || true
-	@echo "✅ Data directories and volumes removed"
+	@echo "✅ Volumes removed"
 
 fclean: clean
 	@echo "🔥 Removing all Docker images..."
@@ -86,7 +73,6 @@ nuclear-reset:
 	@docker compose -f srcs/docker-compose.yml --env-file $(ENV_FILE) down -v
 	@docker system prune -f
 	@docker volume prune -f
-	@sudo rm -rf $(DATA_DIR)/mariadb $(DATA_DIR)/wordpress
 	@echo "🔧 Rebuilding from scratch..."
 	@make all
 
