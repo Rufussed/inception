@@ -25,7 +25,7 @@ services:
       - wordpress_files:/var/www/html
     restart: on-failure
     healthcheck:
-      test: ["CMD", "test", "-f", "/var/www/html/wp-config.php"]
+      test: ["CMD", "test", "-f", "/var/www/html/wp-config.php"] # Check if wp-config.php exists
       interval: 10s
       timeout: 5s
       retries: 5

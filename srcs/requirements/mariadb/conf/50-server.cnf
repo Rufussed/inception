@@ -1,25 +1,30 @@
 [mysqld]
-user = mysql
-pid-file = /var/run/mysqld/mysqld.pid
-socket = /var/run/mysqld/mysqld.sock
-port = 3306
-basedir = /usr
-datadir = /var/lib/mysql
-tmpdir = /tmp
-bind-address = 0.0.0.0
-skip-networking = 0
+# Process management
+user = mysql                                   # Run as mysql user for security
+pid-file = /var/run/mysqld/mysqld.pid          # Where to store the process ID
+socket = /var/run/mysqld/mysqld.sock           # Unix socket for local connections
 
-# Security
-skip-name-resolve = 1
+# Network settings (Essential for container communication)
+port = 3306                                    # Standard MySQL/MariaDB port
+bind-address = 0.0.0.0                         # Allow connections from other containers (not just localhost)
+skip-networking = 0                            # Enable TCP/IP connections
+
+# Directory settings
+basedir = /usr                                # Base installation directory
+datadir = /var/lib/mysql                      # Where database files are stored
+tmpdir = /tmp                                 # Temporary file directory
+
+# Security settings
+skip-name-resolve = 1                         # Don't resolve hostnames (faster, more secure)
 
 # Crash-safer defaults
-innodb_flush_log_at_trx_commit = 1
-sync_binlog = 1
+innodb_flush_log_at_trx_commit = 1           # Write to disk on each commit (ACID compliance)
+sync_binlog = 1                              # Sync binary log after each write
 
-# Character sets
-character-set-server = utf8mb4
-collation-server = utf8mb4_unicode_ci
+# Character sets (for proper UTF-8 support)
+character-set-server = utf8mb4               # Full UTF-8 character set
+collation-server = utf8mb4_unicode_ci        # Case-insensitive UTF-8 collation
 
-# InnoDB settings
-innodb_buffer_pool_size = 128M
-innodb_file_per_table = 1
+# InnoDB settings (performance)
+innodb_buffer_pool_size = 128M               # Memory for caching data and indexes
+innodb_file_per_table = 1                    # Separate file for each table (better management)

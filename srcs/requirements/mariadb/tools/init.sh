@@ -5,10 +5,6 @@ mkdir -p /var/run/mysqld /var/lib/mysql
 chown -R mysql:mysql /var/run/mysqld /var/lib/mysql
 chmod 777 /var/run/mysqld
 
-# Configure MariaDB to listen on all interfaces
-sed -i 's/bind-address.*/bind-address = 0.0.0.0/' /etc/mysql/mariadb.conf.d/50-server.cnf
-sed -i 's/#port/port/' /etc/mysql/mariadb.conf.d/50-server.cnf
-
 # Initialize if needed
 if [ ! -d "/var/lib/mysql/mysql" ]; then
     mysql_install_db --user=mysql --datadir=/var/lib/mysql --skip-test-db
@@ -19,11 +15,8 @@ mysqld --user=mysql &
 pid="$!"
 
 # Wait for MariaDB to be ready
-for i in $(seq 1 30); do
-    if mysqladmin ping >/dev/null 2>&1; then
-        break
-    fi
-    sleep 1
+until mysqladmin ping >/dev/null 2>&1; do
+    echo "Waiting for MariaDB to start..."
 done
 
 # Always ensure database and users exist
