@@ -57,6 +57,16 @@ services:
       - inception
     restart: on-failure
 
+  redis:
+    build:
+      context: ./requirements/redis
+    container_name: redis
+    networks:
+      - inception
+    volumes:
+      - redis_data:/var/lib/redis
+    restart: always
+
 networks:
   inception:
     driver: bridge
@@ -67,4 +77,6 @@ volumes:
   wordpress_files:
     driver: local
   static_files:
+    driver: local
+  redis_data:
     driver: local

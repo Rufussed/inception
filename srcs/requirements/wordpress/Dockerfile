@@ -10,9 +10,12 @@ FROM debian:bullseye
 RUN apt-get update && apt-get install -y \
     php-fpm \
     php-mysql \
+    php-redis \
     wget \
     default-mysql-client \
     curl \
+    # needed for extracting redis extension
+    unzip \ 
     # Clean up apt cache to reduce image size
     && rm -rf /var/lib/apt/lists/* \
     # Create necessary directories
