@@ -67,6 +67,23 @@ services:
       - redis_data:/var/lib/redis
     restart: always
 
+  ftp:
+    build:
+      context: ./requirements/ftp
+    container_name: ftp
+    env_file: .env
+    environment:
+      - FTP_USER=${FTP_USER}
+      - FTP_PASS=${FTP_PASS}
+    networks:
+      - inception
+    volumes:
+      - wordpress_files:/var/www/html
+    ports:
+      - "21:21"
+      - "21000-21010:21000-21010"
+    restart: on-failure
+
 networks:
   inception:
     driver: bridge

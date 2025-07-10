@@ -73,3 +73,8 @@ inception/
 │       └── mariadb/            # MariaDB database
 └── Makefile                    # Build and deployment commands
 ```
+
+
+# to access ftp:
+ip addr show | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' to get ip then
+ftp xxx.xxx.xxx.xxx 21
