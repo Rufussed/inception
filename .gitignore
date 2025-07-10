@@ -1,2 +1,6 @@
 /inception.pdf
 
+/mkcert-v1.4.4-linux-amd64
+
+# GitHub Copilot configuration
+.github/copilot-instructions.md

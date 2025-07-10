@@ -21,7 +21,7 @@ restart: down
 
 clean: down
 	@echo "🧹 Removing volumes..."
-	@docker volume rm srcs_mariadb_data srcs_wordpress_files || true
+	@docker volume rm srcs_mariadb_data srcs_wordpress_files srcs_static_files || true
 	@echo "✅ Volumes removed"
 
 fclean: clean
