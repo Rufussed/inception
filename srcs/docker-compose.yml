@@ -84,6 +84,19 @@ services:
       - "21000-21001:21000-21001"
     restart: on-failure
 
+  adminer:
+    build: ./requirements/adminer
+    container_name: adminer
+    restart: unless-stopped
+    environment:
+      - ADMINER_DEFAULT_SERVER=mariadb
+    expose:
+      - "8080"
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+
 networks:
   inception:
     driver: bridge
