@@ -86,3 +86,6 @@ inception/
 
 ## Reference Document
 Always refer to and utilize the content from "inception.pdf" which contains project requirements, design specifications, and methodology guidelines. Apply the principles and information from this document in all conversations.
+
+## Additional Notes
+- Proceed with one testable step at a time.

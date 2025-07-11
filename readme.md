@@ -74,7 +74,11 @@ inception/
 └── Makefile                    # Build and deployment commands
 ```
 
+# FTP Access (with Port Forwarding)
+- Forward port 2121 (to 21) and the passive port range (e.g., 21000-21001) from host to VM.
+- Example: In VirtualBox, add port forwarding rules for 21 and 21000–21010.
+- Connect from host: `ftp 127.0.0.1 2121` or ftp localhost 2121
 
-# to access ftp:
-ip addr show | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' to get ip then
-ftp xxx.xxx.xxx.xxx 21
+to get ip on vm (not necessary but useful):
+ip addr show | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}'    
+

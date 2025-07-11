@@ -71,5 +71,13 @@ fi
 chown -R www-data:www-data /var/www/html
 chown -R www-data:www-data /var/www/html/wp-content
 
+# Also allow FTP user to write to /var/www/html (for FTP uploads)
+if [ -n "$FTP_USER" ]; then
+  # Try to set group ownership to www-data and add FTP user to group
+  adduser "$FTP_USER" www-data 2>/dev/null || true
+  chown -R www-data:www-data /var/www/html
+  chmod -R 775 /var/www/html
+fi
+
 echo "Starting PHP-FPM..."
 exec php-fpm7.4 -F
