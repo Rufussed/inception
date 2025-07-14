@@ -97,6 +97,16 @@ services:
     depends_on:
       - mariadb
 
+  tinyapi:
+    build: ./requirements/tinyapi
+    container_name: tinyapi
+    hostname: tinyapi.42.fr
+    restart: unless-stopped
+    expose:
+      - "8080"
+    networks:
+      - inception
+
 networks:
   inception:
     driver: bridge

@@ -50,6 +50,28 @@
             <li>Serves static content efficiently</li>
             <li>Part of the bonus requirements</li>
         </ul>
+        <h2>Try the TinyAPI Endpoints</h2>
+        <button onclick="fetchTinyAPI('time')">Show Current Time</button>
+        <button onclick="fetchTinyAPI('hostname')">Show Container Hostname</button>
+        <button onclick="fetchTinyAPI('weather')">Show Berlin Weather</button>
+        <div id="tinyapi-result" style="margin-top:20px;color:#fff;"></div>
     </div>
+    <script>
+      function fetchTinyAPI(type) {
+        let url = 'https://tinyapi.42.fr/?' + type;
+        fetch(url)
+          .then(r => r.json())
+          .then(data => {
+            let result = '';
+            if (data.time) result += `<b>Time:</b> ${data.time}<br>`;
+            if (data.hostname) result += `<b>Hostname:</b> ${data.hostname}<br>`;
+            if (data.weather) result += `<b>Weather:</b> ${data.weather}<br>`;
+            document.getElementById('tinyapi-result').innerHTML = result;
+          })
+          .catch(() => {
+            document.getElementById('tinyapi-result').innerHTML = 'Error fetching from TinyAPI.';
+          });
+      }
+    </script>
 </body>
 </html>
