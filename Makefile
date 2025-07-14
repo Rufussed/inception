@@ -11,6 +11,10 @@ up:
 	@echo "🚀 Starting services..."
 	@docker compose -f srcs/docker-compose.yml --env-file $(ENV_FILE) up -d
 
+ssl:
+	@echo "🔒 Generating SSL certificates with mkcert..."
+	@bash srcs/requirements/nginx/tools/setup-ssl.sh
+
 down:
 	@echo "🛑 Stopping services..."
 	@docker compose -f srcs/docker-compose.yml --env-file $(ENV_FILE) down

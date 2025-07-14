@@ -1,16 +1,15 @@
 #!/bin/bash
-# Generate SSL certs for all required domains using mkcert
 set -e
-CERT_DIR="$(dirname "$0")/../conf/ssl"
+
+# Use project-root-relative path for SSL certs
+CERT_DIR="srcs/requirements/nginx/conf/ssl"
 mkdir -p "$CERT_DIR"
 
-# List your domains here
 DOMAINS=(
   rlane.42.fr
   static.42.fr
   adminer.42.fr
   tinyapi.42.fr
-  # Add more domains as needed
 )
 
 for domain in "${DOMAINS[@]}"; do
